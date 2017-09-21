@@ -54,14 +54,15 @@ t = time.strftime("%d_%m_%Y") + "_" + time.strftime("%H_%M_%S")
 #     cv2.imshow('WindowName', frame)
 #     if cv2.waitKey(25) & 0xFF == ord(' '):
 #         cv2.imwrite(str(t) + '.jpg', frame)
+#         image = frame
 #         cap.release()
 #         cv2.destroyAllWindows()
-#     if cv2.waitKey(25) & 0xFF == ord('q'):
+#     elif cv2.waitKey(25) & 0xFF == ord('q'):
 #         exit()
 
 #imagem carregada, transformação em cinza, threshold adaptativo.
 image = cv2.imread("1.bmp")
-# image = cv2.resize(image, (640,480))
+# Quando for capturar com a câmera, retirar este image aqui de cima. Eu coloquei na captura para o frame ser o image já direto.
 
 cv2.imshow("original", image)
 
