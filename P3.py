@@ -44,6 +44,8 @@ ap.add_argument("-n", "--new", type=int, default=-1,
                 help="whether or not the new order points should should be used")
 args = vars(ap.parse_args())
 
+
+t = time.strftime("%d_%m_%Y") + "_" + time.strftime("%H_%M_%S")
 #Carregar uma imagem da câmera
 #Apertando a tecla espaço: tira foto, faz leitura e cria arquivo "data.txt"
 # cap = cv2.VideoCapture(0)
@@ -51,7 +53,7 @@ args = vars(ap.parse_args())
 #     ret, frame = cap.read()
 #     cv2.imshow('WindowName', frame)
 #     if cv2.waitKey(25) & 0xFF == ord(' '):
-#         cv2.imwrite('im1.bmp', frame)
+#         cv2.imwrite(str(t) + '.jpg', frame)
 #         cap.release()
 #         cv2.destroyAllWindows()
 #     if cv2.waitKey(25) & 0xFF == ord('q'):
