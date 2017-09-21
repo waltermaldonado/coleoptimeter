@@ -3,6 +3,9 @@
 """
 Aplicativo mensurador de coleóptilos.
 Pedro de Figueiredo Rocha Barbosa Martins
+Walter Maldonado Jr
+
+TESTE
 
 Aplicativo para tomada de tamanho no teste de citotóxico de coléoptilos na área de alelopatia.
 """
@@ -44,6 +47,8 @@ ap.add_argument("-n", "--new", type=int, default=-1,
                 help="whether or not the new order points should should be used")
 args = vars(ap.parse_args())
 
+
+t = time.strftime("%d_%m_%Y") + "_" + time.strftime("%H_%M_%S")
 #Carregar uma imagem da câmera
 #Apertando a tecla espaço: tira foto, faz leitura e cria arquivo "data.txt"
 # cap = cv2.VideoCapture(0)
@@ -51,15 +56,16 @@ args = vars(ap.parse_args())
 #     ret, frame = cap.read()
 #     cv2.imshow('WindowName', frame)
 #     if cv2.waitKey(25) & 0xFF == ord(' '):
-#         cv2.imwrite('im1.bmp', frame)
+#         cv2.imwrite(str(t) + '.jpg', frame)
+#         image = frame
 #         cap.release()
 #         cv2.destroyAllWindows()
-#     if cv2.waitKey(25) & 0xFF == ord('q'):
+#     elif cv2.waitKey(25) & 0xFF == ord('q'):
 #         exit()
 
 #imagem carregada, transformação em cinza, threshold adaptativo.
 image = cv2.imread("1.bmp")
-# image = cv2.resize(image, (640,480))
+# Quando for capturar com a câmera, retirar este image aqui de cima. Eu coloquei na captura para o frame ser o image já direto.
 
 cv2.imshow("original", image)
 
