@@ -17,7 +17,7 @@ import time
 
 #definição dos midpoints para outra parte do programa
 def midpoint(ptA, ptB):
-	return ((ptA[0] + ptB[0]) * 0.5, (ptA[1] + ptB[1]) * 0.5)
+    return ((ptA[0] + ptB[0]) * 0.5, (ptA[1] + ptB[1]) * 0.5)
 
 #ordem dos pontos em sentido horário pra não haver falha no sistema
 def order_points(pts):
@@ -46,36 +46,47 @@ args = vars(ap.parse_args())
 
 #Carregar uma imagem da câmera
 #Apertando a tecla espaço: tira foto, faz leitura e cria arquivo "data.txt"
-cap = cv2.VideoCapture(0)
-while(cap.isOpened()):
-    ret, frame = cap.read()
-    cv2.imshow('WindowName', frame)
-    if cv2.waitKey(25) & 0xFF == ord(' '):
-        cv2.imwrite('im1.bmp', frame)
-        cap.release()
-        cv2.destroyAllWindows()
-    if cv2.waitKey(25) & 0xFF == ord('q'):
-        exit()
+# cap = cv2.VideoCapture(0)
+# while(cap.isOpened()):
+#     ret, frame = cap.read()
+#     cv2.imshow('WindowName', frame)
+#     if cv2.waitKey(25) & 0xFF == ord(' '):
+#         cv2.imwrite('im1.bmp', frame)
+#         cap.release()
+#         cv2.destroyAllWindows()
+#     if cv2.waitKey(25) & 0xFF == ord('q'):
+#         exit()
 
 #imagem carregada, transformação em cinza, threshold adaptativo.
-image = cv2.imread("54.png")
+image = cv2.imread("1.bmp")
 # image = cv2.resize(image, (640,480))
 
 cv2.imshow("original", image)
 
+
+hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+h, s, v = cv2.split(hsv)
+
+# cv2.imshow("v", v)
+
+
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-gray = cv2.GaussianBlur(gray, (5,3), 0)
-gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 5, 2)
+gray = cv2.GaussianBlur(gray, (7,5), 0)
+# gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 5, 2)
+#
+# cv2.imshow("thres", gray)
 
 # processos para contorno, dilatar e erodir a imagem para melhor ler os objetos
 edged = cv2.Canny(gray, 75, 150)
-edged = cv2.dilate(edged, None, iterations=1)
-edged = cv2.erode(edged, None, iterations=1)
+edged = cv2.dilate(edged, None, iterations=4)
+edged = cv2.erode(edged, None, iterations=5)
 
 cv2.imshow('edged', edged)
 
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+
+# cv2.imshow('cnts', cnts)
 
 f = open('data.txt', 'a')
 f.write(time.strftime("%d/%m/%Y") + " " + time.strftime("%H:%M:%S") + "\n")
@@ -84,14 +95,14 @@ f.close()
 
 for (i, c) in enumerate(cnts):
    # Limite do contorno. Verificar o valor exato necessário antes.
-    if cv2.contourArea(c) < 250 :
-       continue
+   #  if cv2.contourArea(c) < 250 :
+   #     continue
 
     # contorno retangular nos objetos
     box = cv2.minAreaRect(c)
-    box = cv2.cv.BoxPoints(box)
+    box = cv2.boxPoints(box)
     box = np.array(box, dtype="int")
-    cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
+    cv2.drawContours(image, [box], -1, (0, 255, 0), 1)
 
     rect = order_points(box)
 
@@ -99,13 +110,12 @@ for (i, c) in enumerate(cnts):
     if args["new"] > 0:
         rect = perspective.order_points(box)
 
-#------------------
     box = perspective.order_points(box)
-    cv2.drawContours(image, [box.astype("int")], -1, (0, 255, 0), 2)
+    cv2.drawContours(image, [box.astype("int")], -1, (0, 255, 0), 1)
 
     # Desenhando os contornos
-    for (x, y) in box:
-        cv2.circle(image, (int(x), int(y)), 5, (0, 0, 255), -1)
+    # for (x, y) in box:
+    #     cv2.circle(image, (int(x), int(y)), 5, (0, 0, 255), -1)
 
     # unpack the ordered bounding box, then compute the midpoint
     # between the top-left and top-right coordinates, followed by
@@ -120,9 +130,9 @@ for (i, c) in enumerate(cnts):
 
     # Desenhando as linhas dos midpoints
     cv2.line(image, (int(tltrX), int(tltrY)), (int(blbrX), int(blbrY)),
-             (255, 0, 255), 2)
+             (255, 0, 255), 1)
     cv2.line(image, (int(tlblX), int(tlblY)), (int(trbrX), int(trbrY)),
-             (255, 0, 255), 2)
+             (255, 0, 255), 1)
 
     # Computando a distÂncia euclidiana dos midpoints dos objetos
     dA = dist.euclidean((tltrX, tltrY), (blbrX, blbrY))
