@@ -5,7 +5,7 @@ Aplicativo mensurador de coleóptilos.
 Pedro de Figueiredo Rocha Barbosa Martins
 Walter Maldonado Jr
 
-TESTE
+TESTE 2
 
 Aplicativo para tomada de tamanho no teste de citotóxico de coléoptilos na área de alelopatia.
 """
