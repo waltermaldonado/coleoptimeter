@@ -8,6 +8,7 @@ Walter Maldonado Jr
 TESTE 1
 
 Size calcs
+Feat
 
 Aplicativo para tomada de tamanho no teste de citotóxico de coléoptilos na área de alelopatia.
 """
